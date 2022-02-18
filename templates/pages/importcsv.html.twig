@@ -2,30 +2,87 @@
 
 {% block title %} Importer un Fichier {% endblock %}
 
+{% block stylesheets %}
+    {# page specific stylesheets #}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var blockUI = new KTBlockUI(document.querySelector('html'), {
+            zIndex: 9999999,
+        });
+
+        $('#import_csv').on('click', function (e){
+            blockUI.block();
+        });
+
+
+    </script>
+{% endblock %}
+
 {% block content %}
-    <!--begin::Content-->
-    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-        <!--begin::Toolbar-->
-        <div class="toolbar" id="kt_toolbar">
-            <!--begin::Container-->
-            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                <!--begin::Page title-->
-                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                    <!--begin::Title-->
-                    <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Importer un Fichier
-                        <!--begin::Separator-->
-                        <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
-                        <!--end::Separator-->
-                        <!--begin::Description-->
-                        <small class="text-muted fs-7 fw-bold my-1 ms-1">Importer un fichier dans l'application</small>
-                        <!--end::Description--></h1>
-                    <!--end::Title-->
-                </div>
-                <!--end::Page title-->
+
+    <!--begin::Toolbar-->
+    <div class="toolbar" id="kt_toolbar">
+        <!--begin::Container-->
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Title-->
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Importer un Fichier
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <!--end::Separator-->
+                    <!--begin::Description-->
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Importer un fichier dans l'application</small>
+                    <!--end::Description--></h1>
+                <!--end::Title-->
             </div>
-            <!--end::Container-->
+            <!--end::Page title-->
         </div>
-        <!--end::Toolbar-->
+        <!--end::Container-->
     </div>
-    <!--end::Content-->
+    <!--end::Toolbar-->
+    <!--begin::Post-->
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+        <div id="kt_content_container" class="container-xxl">
+            <!--begin::Row-->
+            <div class="row gy-5 g-xl-8">
+                <!--begin::Col-->
+                <div class="col-xl-12">
+                    <div class="card">
+                        <!--begin::Card header-->
+                        <div class="card-header">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">Chosissez votre fichier</span>
+                                <span class="text-muted mt-1 fw-bold fs-7">Le fichier CSV a importer</span>
+                            </h3>
+                        </div>
+                        <!--end::Card header-->
+                        <!--begin::Card body-->
+                        <div class="card-body">
+                            <!--begin::Form-->
+                            <form class="form" action="{{ path('app_dash_importfile') }}" method="post" enctype="multipart/form-data">
+                                <div class="row mt-4">
+                                    <input class="form-control" type="file" name="csvfile" accept="text/csv">
+                                </div>
+                                <div class="row d-flex justify-content-center mt-4">
+                                    <button class="col-4 btn btn-primary btn-hover-scale" id="import_csv">Importer</button>
+                                </div>
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                        <!--end::Card body-->
+                    </div>
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Row-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Post-->
 {% endblock %}
