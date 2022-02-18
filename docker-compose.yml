@@ -1,0 +1,62 @@
+services:
+  php:
+    build: .docker/php-fpm
+    container_name: php
+    working_dir: /application
+    expose:
+      - 9000
+      - 8080
+    ports:
+      - 88:80
+    depends_on:
+      - db
+      - adminer
+    command: >
+      sh -c "cd /application && composer install && /usr/local/bin/php -S 0.0.0.0:80 -t public"
+    volumes:
+      - .:/application
+      - /application/node_modules
+      - ./.docker/php-fpm/custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./.docker/php-fpm/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ~/.ssh/:/root/.ssh/
+    env_file:
+      - .env
+
+  db:
+    # In production, you may want to use a managed database service
+    image: mysql:5.7
+    container_name: db
+    command: --secure-file-priv=""
+    environment:
+      - MYSQL_DATABASE=gac_test
+      - MYSQL_USER=gac_test
+      - MYSQL_PASSWORD=secret
+      # You should definitely change the password in production
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - .docker/mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:rw
+      - .docker/mysql/mysqld.conf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      - .docker/mysql/mysqld.conf:/etc/mysql/conf.d/docker.cnf
+    expose:
+      - 3306
+#    ports:
+#      - 3306:3306
+    healthcheck:
+      test:
+        - "CMD"
+        - "mysql"
+        - "-e"
+        - "show databases;"
+        - "-h"
+        - "db"
+        - "-u"
+        - "root"
+        - "-psecret"
+      timeout: 5s
+      retries: 30
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    ports:
+      - 9081:8080
