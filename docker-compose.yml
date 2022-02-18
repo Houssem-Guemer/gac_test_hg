@@ -39,8 +39,8 @@ services:
       - .docker/mysql/mysqld.conf:/etc/mysql/conf.d/docker.cnf
     expose:
       - 3306
-#    ports:
-#      - 3306:3306
+    ports:
+      - 3306:3306
     healthcheck:
       test:
         - "CMD"
