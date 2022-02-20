@@ -36,6 +36,7 @@ RUN apk add --no-cache --virtual \
     && docker-php-ext-configure gd \
     && docker-php-ext-install -j2 bcmath gd iconv mcrypt \
     && docker-php-ext-enable opcache \
+    && docker-php-ext-install pdo pdo_mysql \
     && rm /usr/src/php/ext/*.tgz \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug \
