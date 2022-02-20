@@ -13,10 +13,10 @@
         });
 
         $('#import_csv').on('click', function (e){
-            blockUI.block();
+            if ($('#csvfile').val()) {
+                blockUI.block();
+            }
         });
-
-
     </script>
 {% endblock %}
 
@@ -67,7 +67,7 @@
                             <!--begin::Form-->
                             <form class="form" action="{{ path('app_dash_importfile') }}" method="post" enctype="multipart/form-data">
                                 <div class="row mt-4">
-                                    <input class="form-control" type="file" name="csvfile" accept="text/csv">
+                                    <input class="form-control" type="file" name="csvfile" id="csvfile" accept="text/csv" required="required">
                                 </div>
                                 <div class="row d-flex justify-content-center mt-4">
                                     <button class="col-4 btn btn-primary btn-hover-scale" id="import_csv">Importer</button>

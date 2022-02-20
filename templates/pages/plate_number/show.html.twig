@@ -1,0 +1,215 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Immatriculation{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    <script>
+        $('#search_plate').on('click', function (e) {
+            var plateNumber = $('#plateNumber').val();
+            if (plateNumber) {
+                window.location = '/platenumber/' + plateNumber;
+                return false;
+            }
+        });
+        $(document).ready(function () {
+            $("#expenses_table").DataTable({
+                language: {
+                url: '{{ asset('assets/plugins/custom/datatables/i18n/fr-FR.json') }}'
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <!--begin::Toolbar-->
+    <div class="toolbar" id="kt_toolbar">
+        <!--begin::Container-->
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Title-->
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Immatriculation
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <!--end::Separator-->
+                    <!--begin::Description-->
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Voir les dernières 50 dépenses pour une immatriculation.</small>
+                    <!--end::Description--></h1>
+                <!--end::Title-->
+            </div>
+            <!--end::Page title-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Post-->
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+        <div id="kt_content_container" class="container-xxl">
+            {% if vehicleHistory is not empty %}
+                <!--begin::Row-->
+                <div class="row gy-5 g-xl-8">
+                    <!--begin::Col-->
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <!--begin::Card header-->
+                            <div class="card-header">
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label fw-bolder text-dark">Véhicule</span>
+                                    <span class="text-muted mt-1 fw-bold fs-7">{{ plateNumber }}</span>
+                                </h3>
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body p-4">
+                                <div class="d-flex flex-wrap flex-sm-nowrap">
+                                    <!--begin: Pic-->
+                                    <div class="me-7 mb-4">
+                                        <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
+                                            <img src="{{ asset('assets/brands/' ~ vehicleHistory[0]["brand"] ~ '.png') }}" alt="image">
+                                        </div>
+                                    </div>
+                                    <!--end::Pic-->
+                                    <!--begin::Info-->
+                                    <div class="flex-grow-1">
+                                        <!--begin::Title-->
+                                        <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+                                            <!--begin::User-->
+                                            <div class="d-flex flex-column">
+                                                <!--begin::Name-->
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <a class="text-gray-900 text-hover-primary fs-2 fw-bolder me-1">{{ plateNumber }}</a>
+                                                </div>
+                                                <!--end::Name-->
+                                            </div>
+                                            <!--end::User-->
+                                        </div>
+                                        <!--end::Title-->
+                                        <!--begin::Stats-->
+                                        <div class="d-flex flex-wrap flex-stack">
+                                            <!--begin::Wrapper-->
+                                            <div class="d-flex flex-column flex-grow-1 pe-8">
+                                                <!--begin::Stats-->
+                                                <div class="d-flex flex-wrap">
+                                                    <!--begin::Stat-->
+                                                    <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                                        <!--begin::Number-->
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="fs-2 fw-bolder">{{ vehicleHistory[0]["brand"] }}</div>
+                                                        </div>
+                                                        <!--end::Number-->
+                                                        <!--begin::Label-->
+                                                        <div class="fw-bold fs-6 text-gray-400">Marque</div>
+                                                        <!--end::Label-->
+                                                    </div>
+                                                    <!--end::Stat-->
+                                                    <!--begin::Stat-->
+                                                    <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                                        <!--begin::Number-->
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="fs-2 fw-bolder">{{ vehicleHistory[0]["model"] }}</div>
+                                                        </div>
+                                                        <!--end::Number-->
+                                                        <!--begin::Label-->
+                                                        <div class="fw-bold fs-6 text-gray-400">Model</div>
+                                                        <!--end::Label-->
+                                                    </div>
+                                                    <!--end::Stat-->
+                                                </div>
+                                                <!--end::Stats-->
+                                            </div>
+                                            <!--end::Wrapper-->
+                                        </div>
+                                        <!--end::Stats-->
+                                    </div>
+                                    <!--end::Info-->
+                                </div>
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Row-->
+                <!--begin::Row-->
+                <div class="row gy-5 g-xl-8 mt-4">
+                    <!--begin::Col-->
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <!--begin::Card header-->
+                            <div class="card-header">
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label fw-bolder text-dark">les dernières 50 dépenses pour: {{ plateNumber }}</span>
+                                </h3>
+                            </div>
+                            <!--end::Card header-->
+                            <!--begin::Card body-->
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="expenses_table" class="table table-striped table-row-bordered gy-5">
+                                        <thead>
+                                            <tr class="fw-bolder fs-6 text-gray-800">
+                                                <th>N# de dépense</th>
+                                                <th>N# de facture</th>
+                                                <th>Date de dépense</th>
+                                                <th>Catégorie</th>
+                                                <th>Montant HT</th>
+                                                <th>Taux de tax</th>
+                                                <th>Montant TTC</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for expense in vehicleHistory %}
+                                            <tr>
+                                                <td>{{ expense['expense_number'] }}</td>
+                                                <td>{{ expense['invoice_number'] }}</td>
+                                                <td>{{ expense['issued_on'] }}</td>
+                                                <td>{{ expense['category'] }}</td>
+                                                <td>{{ expense['value_te'] }}</td>
+                                                <td>{{ expense['tax_rate'] }}</td>
+                                                <td>{{ expense['value_ti'] }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--end::Card body-->
+                        </div>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Row-->
+            {% else %}
+                <!--begin::Row-->
+                <div class="row gy-5 g-xl-8">
+                    <!--begin::Col-->
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <!--begin::Card header-->
+                            <div class="card-header">
+                                <h3 class="card-title align-items-start flex-column">
+                                    <span class="card-label fw-bolder text-dark">Véhicule {{ plateNumber }} n'éxiste pas ou n'a fait aucune dépense</span>
+                                    <span class="text-muted mt-1 fw-bold fs-7"></span>
+                                </h3>
+                            </div>
+                            <!--end::Card header-->
+                        </div>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Row-->
+            {% endif %}
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Post-->
+{% endblock %}

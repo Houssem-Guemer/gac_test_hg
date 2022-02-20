@@ -171,4 +171,29 @@ class ExpenseRepository extends ServiceEntityRepository
             'endDate'=>$endDate
         ])->fetchAllAssociative();
     }
+
+    /**
+     * @param $plateNumber
+     * @return array
+     */
+    public function vehicleHistory($plateNumber): array
+    {
+        $entityManager = $this->getEntityManager();
+        $conn = $entityManager->getConnection();
+
+        $sql = '
+            SELECT e.vehicle_id,v.plate_number,v.brand,v.model,e.value_ti,e.value_te,e.issued_on,e.expense_number,e.invoice_number,e.category,e.description,e.tax_rate FROM expense e
+            JOIN vehicle v on v.vehicle_id = e.vehicle_id
+            WHERE v.plate_number = :plateNumber
+            ORDER BY e.issued_on DESC
+            LIMIT 50
+            ';
+        $stmt = $conn->prepare($sql);
+
+
+        // returns the sum by vehicle
+        return $stmt->execute([
+            'plateNumber'=>$plateNumber
+        ])->fetchAllAssociative();
+    }
 }

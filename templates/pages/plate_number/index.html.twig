@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Immatriculation{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $('#search_plate').on('click', function (e) {
+            var plateNumber = $('#plateNumber').val();
+            if (plateNumber) {
+                window.location = '/platenumber/' + plateNumber;
+                return false;
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <!--begin::Toolbar-->
+    <div class="toolbar" id="kt_toolbar">
+        <!--begin::Container-->
+        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+            <!--begin::Page title-->
+            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Title-->
+                <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Immatriculation
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <!--end::Separator-->
+                    <!--begin::Description-->
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">Voir les dernières 50 dépenses pour une immatriculation.</small>
+                    <!--end::Description--></h1>
+                <!--end::Title-->
+            </div>
+            <!--end::Page title-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Toolbar-->
+    <!--begin::Post-->
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+        <div id="kt_content_container" class="container-xxl">
+            <!--begin::Row-->
+            <div class="row gy-5 g-xl-8">
+                <!--begin::Col-->
+                <div class="col-xl-12">
+                    <div class="card">
+                        <!--begin::Card header-->
+                        <div class="card-header">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-dark">Entrez une immatriculation</span>
+                                <span class="text-muted mt-1 fw-bold fs-7">L'immatriculation à rechercher</span>
+                            </h3>
+                        </div>
+                        <!--end::Card header-->
+                        <!--begin::Card body-->
+                        <div class="card-body">
+                            <!--begin::Form-->
+                            <form class="form">
+                                <div class="row mt-4 d-flex justify-content-center">
+                                    <div class="w-lg-50 position-relative col-sm-8 col-md-6">
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder="XX-XXX-XX" id="plateNumber" required="required"/>
+                                        <!--end::Input-->
+
+                                        <!--begin::CVV icon-->
+                                        <div class="position-absolute translate-middle-y top-50 end-0 me-3">
+                                            <!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black"/>
+                                                    <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black"/>
+                                                </svg></span>
+                                            <!--end::Svg Icon-->
+                                        </div>
+                                        <!--end::CVV icon-->
+                                    </div>
+                                    <button class="col-sm-4 btn btn-primary btn-hover-scale" id="search_plate">Rechercher</button>
+                                </div>
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                        <!--end::Card body-->
+                    </div>
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Row-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Post-->
+{% endblock %}
