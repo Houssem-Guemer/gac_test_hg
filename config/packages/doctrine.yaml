@@ -1,6 +1,6 @@
 doctrine:
     dbal:
-        url: '%env(resolve:DATABASE_URL)%'
+        url: 'mysql://gac_test:secret@db:3306/gac_test?serverVersion=5.7&charset=utf8mb4'
         types:
             point: CrEOF\Spatial\DBAL\Types\Geometry\PointType
         mapping_types:

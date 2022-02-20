@@ -305,6 +305,78 @@
             var chart_ht = new ApexCharts(element_ht, options_ht);
             var chart_ttc = new ApexCharts(element_ttc, options_ttc);
 
+            var start = moment('2022-01-01 00:00:00');
+            var end = moment('2022-02-28 23:59:59');
+
+            var url_object = new URL(window.location.href);
+            var startDate = url_object.searchParams.get("startDate");
+            var endDate = url_object.searchParams.get("endDate");
+            if (startDate) {
+                start = moment(startDate);
+            }
+            if (endDate) {
+                end = moment(endDate);
+            }
+
+            function cb(start, end) {
+                $('#reportrange span').html(start.format('DD/MM/YYYY hh:mm') + ' - ' + end.format('DD/MM/YYYY hh:mm'));
+            }
+
+            function sendQuery(start, end) {
+                window.location = '/?startDate=' + start.format('YYYY-MM-DD hh:mm:ss') + '&endDate=' + end.format('YYYY-MM-DD hh:mm:ss');
+            }
+
+            $('#reportrange').daterangepicker({
+                startDate: start,
+                endDate: end,
+                timePicker: true,
+                locale: {
+                    format: "MM/DD/YYYY",
+                    separator: " - ",
+                    applyLabel: "Appliquer",
+                    cancelLabel: "Annuler",
+                    fromLabel: "À partir de",
+                    toLabel: "À",
+                    customRangeLabel: "Personnalisé",
+                    weekLabel: "W",
+                    daysOfWeek: [
+                        "dim.",
+                        "lundi",
+                        "mardi",
+                        "mercr.",
+                        "jeudi",
+                        "vendr.",
+                        "sam."
+                    ],
+                    monthNames: [
+                        "Janvier",
+                        "Février",
+                        "Mars",
+                        "Avril",
+                        "Mai",
+                        "Juin",
+                        "Juillet",
+                        "Août",
+                        "Septembre",
+                        "Octobre",
+                        "Novembre",
+                        "Décembre"
+                    ],
+                    firstDay: 1
+                },
+                ranges: {
+                    'Aujourd\'hui': [moment(), moment()],
+                    'Hier': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Les 7 derniers jours': [moment().subtract(6, 'days'), moment()],
+                    'Les 30 derniers jours': [moment().subtract(29, 'days'), moment()],
+                    'Ce mois-ci': [moment().startOf('month'), moment().endOf('month')],
+                    'Le mois dernier': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, sendQuery);
+
+            cb(start, end);
+
+
             setTimeout(function() {
                 chart_ht.render();
                 chart_ttc.render();
@@ -335,92 +407,13 @@
             <div class="d-flex align-items-center gap-2 gap-lg-3">
                 <!--begin::Filter menu-->
                 <div class="m-0">
-                    <!--begin::Menu toggle-->
-                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                        <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-                        <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="black" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->Filtrer</a>
-                    <!--end::Menu toggle-->
-                    <!--begin::Menu 1-->
-                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6207935a99e56">
-                        <!--begin::Header-->
-                        <div class="px-7 py-5">
-                            <div class="fs-5 text-dark fw-bolder">Options de filtrage</div>
-                        </div>
-                        <!--end::Header-->
-                        <!--begin::Menu separator-->
-                        <div class="separator border-gray-200"></div>
-                        <!--end::Menu separator-->
-                        <!--begin::Form-->
-                        <div class="px-7 py-5">
-                            <!--begin::Input group-->
-                            <div class="mb-10">
-                                <!--begin::Label-->
-                                <label class="form-label fw-bold">Status:</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <div>
-                                    <select class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Select option" data-dropdown-parent="#kt_menu_6207935a99e56" data-allow-clear="true">
-                                        <option></option>
-                                        <option value="1">Approved</option>
-                                        <option value="2">Pending</option>
-                                        <option value="2">In Process</option>
-                                        <option value="2">Rejected</option>
-                                    </select>
-                                </div>
-                                <!--end::Input-->
-                            </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="mb-10">
-                                <!--begin::Label-->
-                                <label class="form-label fw-bold">Member Type:</label>
-                                <!--end::Label-->
-                                <!--begin::Options-->
-                                <div class="d-flex">
-                                    <!--begin::Options-->
-                                    <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                        <input class="form-check-input" type="checkbox" value="1" />
-                                        <span class="form-check-label">Author</span>
-                                    </label>
-                                    <!--end::Options-->
-                                    <!--begin::Options-->
-                                    <label class="form-check form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input" type="checkbox" value="2" checked="checked" />
-                                        <span class="form-check-label">Customer</span>
-                                    </label>
-                                    <!--end::Options-->
-                                </div>
-                                <!--end::Options-->
-                            </div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="mb-10">
-                                <!--begin::Label-->
-                                <label class="form-label fw-bold">Notifications:</label>
-                                <!--end::Label-->
-                                <!--begin::Switch-->
-                                <div class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" value="" name="notifications" checked="checked" />
-                                    <label class="form-check-label">Enabled</label>
-                                </div>
-                                <!--end::Switch-->
-                            </div>
-                            <!--end::Input group-->
-                            <!--begin::Actions-->
-                            <div class="d-flex justify-content-end">
-                                <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true">Reset</button>
-                                <button type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Apply</button>
-                            </div>
-                            <!--end::Actions-->
-                        </div>
-                        <!--end::Form-->
+                    <!--begin::Input-->
+                    <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span>
+                        <i class="fa fa-caret-down"></i>
                     </div>
-                    <!--end::Menu 1-->
+                    <!--end::Input-->
                 </div>
                 <!--end::Filter menu-->
                 <!--begin::Primary button-->
@@ -497,6 +490,82 @@
                         <!--end::Card body-->
                     </div>
                     <!--end::Card widget 5-->
+                </div>
+                <!--end::Col-->
+            </div>
+            <!--end::Row-->
+            <!--begin::Row-->
+            <div class="row gy-5 g-xl-8">
+                <!--begin::Col-->
+                <div class="col-12 mb-5 mb-lg-10">
+                    <!--begin::List widget 6-->
+                    <div class="card card-flush h-md-100">
+                        <!--begin::Header-->
+                        <div class="card-header pt-7">
+                            <!--begin::Title-->
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder text-gray-800">Les véhicules qui dépensent le plus</span>
+                            </h3>
+                            <!--end::Title-->
+                            <!--begin::Toolbar-->
+                            <!--<div class="card-toolbar">
+                                <a href="../../demo1/dist/apps/ecommerce/catalog/categories.html" class="btn btn-sm btn-light">View All</a>
+                            </div>-->
+                            <!--end::Toolbar-->
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+                        <div class="card-body pt-4">
+                            <!--begin::Table container-->
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4 my-0">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="fs-7 fw-bolder text-gray-500 border-bottom-0">
+                                            <th class="p-0 w-50px pb-1">Véhicule</th>
+                                            <th class="ps-0 min-w-140px"></th>
+                                            <th class="text-end min-w-140px p-0 pb-1">Dépenses HT</th>
+                                            <th class="text-end min-w-140px p-0 pb-1">Dépenses HT</th>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody>
+                                        {% if sumHtByVehicle is not empty %}
+                                            {% for i in 0..9 %}
+                                                <tr>
+                                                    <td>
+                                                        <img src="{{ asset('assets/brands/' ~ sumHtByVehicle[i]["brand"] ~ '.png') }}" class="w-50px" alt="">
+                                                    </td>
+                                                    <td class="ps-0">
+                                                        <a href="#" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">{{ sumHtByVehicle[i]["plate_number"] }}</a>
+                                                        <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">Marque: {{ sumHtByVehicle[i]["brand"] }} Model: {{ sumHtByVehicle[i]["model"] }}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">{{ sumHtByVehicle[i]["sum"] }} €</span>
+                                                    </td>
+                                                    <td>
+                                                        <span class="text-gray-800 fw-bolder d-block fs-6 ps-0 text-end">{{ sumTtcByVehicle[i]["sum"] }} €</span>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="4" class="text-center">
+                                                    Aucune donnée n'a été trouvée, veuillez importer un fichier.
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                            </div>
+                            <!--end::Table-->
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <!--end::List widget 6-->
                 </div>
                 <!--end::Col-->
             </div>
