@@ -539,7 +539,7 @@
                                                         <img src="{{ asset('assets/brands/' ~ sumHtByVehicle[i]["brand"] ~ '.png') }}" class="w-50px" alt="">
                                                     </td>
                                                     <td class="ps-0">
-                                                        <a href="#" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">{{ sumHtByVehicle[i]["plate_number"] }}</a>
+                                                        <a href="{{ path('plate_number_show', {'plateNumber': sumHtByVehicle[i]["plate_number"]}) }}" class="text-gray-800 fw-bolder text-hover-primary mb-1 fs-6 text-start pe-0">{{ sumHtByVehicle[i]["plate_number"] }}</a>
                                                         <span class="text-gray-400 fw-bold fs-7 d-block text-start ps-0">Marque: {{ sumHtByVehicle[i]["brand"] }} Model: {{ sumHtByVehicle[i]["model"] }}</span>
                                                     </td>
                                                     <td>
