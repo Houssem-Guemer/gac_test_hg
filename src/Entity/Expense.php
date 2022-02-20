@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use DateTime;
+use App\Repository\ExpenseRepository;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
@@ -10,7 +11,7 @@ use InvalidArgumentException;
  * Expense
  *
  * @ORM\Table(name="expense", uniqueConstraints={@ORM\UniqueConstraint(name="expense_number_idx", columns={"expense_number"})}, indexes={@ORM\Index(name="vehicle_id_idx", columns={"vehicle_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=ExpenseRepository::class)
  */
 class Expense
 {
@@ -36,6 +37,13 @@ class Expense
      * @ORM\Column(name="invoice_number", type="string", length=255, nullable=false)
      */
     private $invoiceNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     */
+    private $description;
 
     /**
      * @var DateTime
@@ -107,6 +115,18 @@ class Expense
     public function setInvoiceNumber(string $invoiceNumber): self
     {
         $this->invoiceNumber = $invoiceNumber;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

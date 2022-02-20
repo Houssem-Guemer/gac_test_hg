@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\GasStationRepository;
 use CrEOF\Spatial\ORM\Query\AST\Functions\MySql\Point;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * GasStation
  *
  * @ORM\Table(name="gas_station", uniqueConstraints={@ORM\UniqueConstraint(name="expense_id", columns={"expense_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=GasStationRepository::class)
  */
 class GasStation
 {

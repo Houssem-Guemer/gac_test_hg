@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\VehicleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Vehicle
  *
  * @ORM\Table(name="vehicle", uniqueConstraints={@ORM\UniqueConstraint(name="plate_number_idx", columns={"plate_number"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=VehicleRepository::class)
  */
 class Vehicle
 {

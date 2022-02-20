@@ -72,9 +72,19 @@
                 "hideMethod": "fadeOut"
             };
             {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    toastr.success("{{ message }}");
-                {% endfor %}
+                {% if label == "success" %}
+                    {% for message in messages %}
+                        toastr.success("{{ message }}");
+                    {% endfor %}
+                {% elseif label == "warning" %}
+                    {% for message in messages %}
+                        toastr.warning("{{ message }}");
+                    {% endfor %}
+                {% elseif label == "error" %}
+                    {% for message in messages %}
+                        toastr.error("{{ message }}");
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
         </script>
         <!--end::toaster-->

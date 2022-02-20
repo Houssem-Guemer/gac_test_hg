@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Expense;
+use App\Entity\GasStation;
+use App\Entity\Vehicle;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DashController extends AbstractController
@@ -15,8 +15,15 @@ class DashController extends AbstractController
      */
     public function index()
     {
+        $vehicleRepository = $this->getDoctrine()->getRepository(Vehicle::class);
+        $expenseRepository = $this->getDoctrine()->getRepository(Expense::class);
+        $gasStationRepository = $this->getDoctrine()->getRepository(GasStation::class);
+
         return $this->render('pages/index.html.twig', [
-            'uploaded'=>'false'
+            'sumHT'=>$expenseRepository->sumHT(),
+            'sumTTC'=>$expenseRepository->sumTTC(),
+            'sumHtByCategory'=>$expenseRepository->sumHtByCategory(),
+            'sumTtcByCategory'=>$expenseRepository->sumTtcByCategory(),
         ]);
     }
 
@@ -26,14 +33,6 @@ class DashController extends AbstractController
     public function importPage()
     {
         return $this->render('pages/importcsv.html.twig');
-    }
-
-    /**
-     * @Route("/importcsvfile", methods="POST", name="app_dash_importfile")
-     */
-    public function importCSV(Request $request){
-        $this->addFlash('uploaded','Votre fichier a été importer avec succès');
-        return $this->redirect("/");
     }
 
 }

@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `expense`
     `expense_number` varchar(64)                                                      NOT NULL COMMENT '',
     `invoice_number` varchar(255)                                                     NOT NULL COMMENT '',
     `issued_on`      datetime                                                         NOT NULL,
+	`description`    varchar(255)                                                     NOT NULL,
     `category`       enum ('gasoline','diesel','electricity_charge','gpl','hydrogen') NOT NULL COMMENT '',
     `value_te`       decimal(10, 3)                                                   NOT NULL COMMENT '',
     `tax_rate`       decimal(5, 3)                                                    NOT NULL COMMENT '',
@@ -39,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `expense`
 -- RELATION 1-1 avec expense
 CREATE TABLE IF NOT EXISTS `gas_station`
 (
-    `gas_station_id`  int(10) unsigned NOT NULL,
+    `gas_station_id`  int(10) unsigned NOT NULL AUTO_INCREMENT,
     `expense_id`      int(10) unsigned NOT NULL,
     `description`     TEXT             NOT NULL COMMENT '',
     `coordinate`      point            NOT NULL COMMENT '',
