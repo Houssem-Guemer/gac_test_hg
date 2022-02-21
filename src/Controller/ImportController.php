@@ -6,6 +6,7 @@ use App\Entity\Expense;
 use App\Entity\GasStation;
 use App\Entity\Vehicle;
 use CrEOF\Spatial\PHP\Types\Geometry\Point;
+use DateTime;
 use SplFileObject;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,7 +35,7 @@ class ImportController extends AbstractController
         if ($this->import($csvfile)) {
             $this->addFlash('success','Votre fichier a été importer avec succès');
         } else {
-            $this->addFlash('error','Une erreur est arriver pendant l\'import du fichier');
+            $this->addFlash('error','Le fichier n\'est pas bon');
         }
 
         return $this->redirect("/");
@@ -52,7 +53,11 @@ class ImportController extends AbstractController
         {
             $count = 0;
             $batchSize = 1000;
-            $data = fgetcsv($handle, 0, ";");
+            $header = fgetcsv($handle, 0, ";");
+
+            if(!$this->checkFile($header)) {
+                return false;
+            }
 
             while (($data = fgetcsv($handle, 0, ";")) !== false)
             {
@@ -82,7 +87,7 @@ class ImportController extends AbstractController
                     $expense->setExpenseNumber($data[10]);
                     $expense->setInvoiceNumber($data[9]);
                     $expense->setDescription($data[4]);
-                    $expense->setIssuedOn(\DateTime::createFromFormat('Y-m-d H:i:s', $data[8]));
+                    $expense->setIssuedOn(DateTime::createFromFormat('Y-m-d H:i:s', $data[8]));
                     $expense->setTaxRate($data[7]);
                     $expense->setValueTe($valueTe);
                     $expense->setValueTi($valueTi);
@@ -113,9 +118,14 @@ class ImportController extends AbstractController
         return true;
     }
 
+    /**
+     * Function used to validate a row (line)
+     * @param $row
+     * @return bool
+     */
     public function validRow($row): bool
     {
-        $date = \DateTime::createFromFormat('Y-m-d H:i:s', $row[8]);
+        $date = DateTime::createFromFormat('Y-m-d H:i:s', $row[8]);
         $valueTe = number_format(floatval(str_replace(',','.',$row[5])), 3, '.', '');
         $valueTi = number_format(floatval(str_replace(',','.',$row[6])), 3, '.', '');
 
@@ -134,10 +144,21 @@ class ImportController extends AbstractController
         if (strlen($valueTe) - 1 > 10 or strlen($valueTi) - 1 > 10) {
             return false;
         }
+		
+		// values must be logical
+        if (floatval($valueTe) < 0 or floatval($valueTi) < 0) {
+            return false;
+        }
 
         return true;
     }
-    public function validDate(\DateTime $date): bool
+
+    /**
+     * Function used to validate a date
+     * @param DateTime $date
+     * @return bool
+     */
+    public function validDate(DateTime $date): bool
     {
         $year = (int) $date->format('Y');
         $month = (int) $date->format('m');
@@ -164,6 +185,39 @@ class ImportController extends AbstractController
         if($second < 0 or $minute > 59){
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Function used to check if the file is correct
+     * @param $header
+     * @return bool
+     */
+    private function checkFile($header): bool
+    {
+        // first check if the file is correct by the number of columns
+        if (count($header) != 14) {
+            return false;
+        }
+
+        // check each column header is in the right position and that it is correct to be certain it's the correct file
+        if ($header[0] != "Immatriculation" or
+            $header[1] != "Marque" or
+            $header[2] != "Model"  or
+            $header[3] != "Catégorie  de dépense"  or
+            $header[4] != "Libellé"  or
+            $header[5] != "HT"  or
+            $header[6] != "TTC"  or
+            $header[7] != "TVA"  or
+            $header[8] != "Date & heure"  or
+            $header[9] != "Numéro facture"  or
+            $header[10] != "Code dépense"  or
+            $header[11] != "Station"  or
+            $header[12] != "Position GPS (Latitude) "  or
+            $header[13] != "Position GPS (Longitude)") {
+            return false;
+        }
+
         return true;
     }
 }
